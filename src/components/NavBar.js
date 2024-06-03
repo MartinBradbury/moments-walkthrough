@@ -7,6 +7,18 @@ import { useCurrentUser } from "./CurrentUserContext";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
+  const addPostIcon = (
+    <NavLink
+        className={styles.NavLink}
+        activeClassName={styles.Active}
+        to="/post/create/"
+      >
+        <i className="far fa-plus-square"></i>Add Post
+      </NavLink>
+  )
+
+
+
   const loggedOutIcons = (
     <>
       <NavLink
@@ -25,7 +37,23 @@ const NavBar = () => {
       </NavLink>
     </>
   );
-  const loggedInIcons = <>{currentUser?.username}</>;
+  const loggedInIcons = <>
+    <NavLink
+        className={styles.NavLink}
+        activeClassName={styles.Active}
+        to="/feed/"
+      >
+        <i className="fas fa-stream"></i>Feed
+      </NavLink>
+      <NavLink
+        className={styles.NavLink}
+        activeClassName={styles.Active}
+        to="/feed/"
+      >
+        <i className="far fa-heart"></i>Liked
+      </NavLink>
+  
+  </>;
 
   return (
     <Navbar className={styles.NavBar} expand="md" fixed="top">
@@ -35,6 +63,7 @@ const NavBar = () => {
             <img src={logo} alt="logo image" height="45px" />
           </Navbar.Brand>
         </NavLink>
+        {currentUser && addPostIcon}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
