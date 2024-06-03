@@ -16,84 +16,77 @@ import { Alert, Image } from "react-bootstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { axiosReq } from "../../api/axiosDefaults";
 
-
 function PostCreateForm() {
-
-
-  const imageInput = useRef(null)  
-  const history = useHistory()
+  const imageInput = useRef(null);
+  const history = useHistory();
   const [errors, setErrors] = useState({});
   const [postData, setPostData] = useState({
-    title: '',
-    content: '',
-    image: '',
+    title: "",
+    content: "",
+    image: "",
   });
 
-const {title, content, image} = postData
+  const { title, content, image } = postData;
 
-const handleChange = (event) => {
+  const handleChange = (event) => {
     setPostData({
-        ...postData,
-        [event.target.name]: event.target.value,
+      ...postData,
+      [event.target.name]: event.target.value,
     });
-
-};
-const handleChangeImage = (event) => {
+  };
+  const handleChangeImage = (event) => {
     if (event.target.files.length) {
-        URL.revokeObjectURL(image)
-        setPostData({
-            image: URL.createObjectURL(event.target.files[0])
-        })
+      URL.revokeObjectURL(image);
+      setPostData({
+        image: URL.createObjectURL(event.target.files[0]),
+      });
     }
-}
-const handleSubmit = async (event) => {
-    event.preventDefault()
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const formData = new FormData();
-        formData.append('title', title)
-        formData.append('content', content)
-        formData.append('image', imageInput.current.files[0])
-        try {
-            const {data} = await axiosReq.post('/posts/', formData)
-            history.push(`posts/${data.id}`)
-        }catch(err) {
-            if(err.response?.status !== 401)
-                setErrors(err.response?.data)
-        }
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("image", imageInput.current.files[0]);
+    try {
+      const { data } = await axiosReq.post("/posts/", formData);
+      history.push(`posts/${data.id}`);
+    } catch (err) {
+      if (err.response?.status !== 401) setErrors(err.response?.data);
     }
+  };
   const textFields = (
     <div className="text-center">
-        <Form.Group>
-            <Form.Label>Title</Form.Label>
-            {errors.title?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
-                {message}
-              </Alert>
-            ))}
-            <Form.Control
-                type="text"
-                name="title"
-                value={title}
-                onChange={handleChange}
-                />
-        </Form.Group>
-        <Form.Group>
-            <Form.Label>Description</Form.Label>
-            {errors.content?.map((message, idx) => (
-            <Alert variant="warning" key={idx}>
+      <Form.Group>
+        <Form.Label>Title</Form.Label>
+        {errors.title?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
             {message}
-            </Alert>
+          </Alert>
         ))}
-            <Form.Control
-                as='textarea'
-                rows={6}
-                name='content'
-                value={content}
-                onChange={handleChange}
-                />
-        </Form.Group>
+        <Form.Control
+          type="text"
+          name="title"
+          value={title}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Description</Form.Label>
+        {errors.content?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
+            {message}
+          </Alert>
+        ))}
+        <Form.Control
+          as="textarea"
+          rows={6}
+          name="content"
+          value={content}
+          onChange={handleChange}
+        />
+      </Form.Group>
 
-    
-    
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
         onClick={() => history.goBack()}
@@ -114,43 +107,44 @@ const handleSubmit = async (event) => {
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
             <Form.Group className="text-center">
-                {image ? (
-                    <>
-                    <figure>
-                        <Image className={appStyles.Image} src={image} rounded />
-                    </figure>
-                    <div>
-                        <Form.Label
-                            className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                            htmlFor='image-upload'
-                            >
-                            Change the Image
-                        </Form.Label>
-                    </div>
-                    </>
-                ) : (
+              {image ? (
+                <>
+                  <figure>
+                    <Image className={appStyles.Image} src={image} rounded />
+                  </figure>
+                  <div>
                     <Form.Label
-                    className="d-flex justify-content-center"
-                    htmlFor="image-upload"
-                  >
-                  <Asset src={Upload} message='Click or Tap to upload an image' />
-                  </Form.Label>
-                )}
-              
-                
-                <Form.File 
-                    id='image-upload' 
-                    accept='image/*'
-                    onChange={handleChangeImage}
-                    ref={imageInput}
-                    />
-                    
+                      className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                      htmlFor="image-upload"
+                    >
+                      Change the Image
+                    </Form.Label>
+                  </div>
+                </>
+              ) : (
+                <Form.Label
+                  className="d-flex justify-content-center"
+                  htmlFor="image-upload"
+                >
+                  <Asset
+                    src={Upload}
+                    message="Click or Tap to upload an image"
+                  />
+                </Form.Label>
+              )}
+
+              <Form.File
+                id="image-upload"
+                accept="image/*"
+                onChange={handleChangeImage}
+                ref={imageInput}
+              />
             </Form.Group>
             {errors?.image?.map((message, idx) => (
-                <Alert variant="warning" key={idx}>
-                    {message}
-                </Alert>
-                ))}
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
+            ))}
             <div className="d-md-none">{textFields}</div>
           </Container>
         </Col>
