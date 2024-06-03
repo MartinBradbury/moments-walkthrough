@@ -4,6 +4,7 @@ import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
 import { NavLink } from "react-router-dom";
 import { useCurrentUser } from "./CurrentUserContext";
+import Avatar from "./Avatar";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
@@ -48,9 +49,23 @@ const NavBar = () => {
       <NavLink
         className={styles.NavLink}
         activeClassName={styles.Active}
-        to="/feed/"
+        to="/liked/"
       >
         <i className="far fa-heart"></i>Liked
+      </NavLink>
+      <NavLink
+        className={styles.NavLink}
+        to="/"
+        onClick = {() => {}}
+      >
+        <i className="fas fa-sign-out-alt"></i>Sign Out
+      </NavLink>
+
+      <NavLink
+        className={styles.NavLink}
+        to={`/profiles/${currentUser?.profile_id}`}
+      >
+        <Avatar src={currentUser?.profile_image} text='profile' height={40} />
       </NavLink>
   
   </>;
