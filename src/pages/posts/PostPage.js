@@ -11,7 +11,7 @@ import Post from "./Post";
 
 function PostPage() {
   const { id } = useParams();
-  console.log(id)
+  console.log(id);
   const [post, setPost] = useState({ results: [] });
 
   useEffect(() => {
